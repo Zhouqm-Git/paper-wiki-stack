@@ -199,7 +199,7 @@ This repository includes a defensive [.gitignore](.gitignore) and `scripts/check
 
 ## License and Attribution
 
-This repository is a wrapper and documentation layer. Each component keeps its own license.
+This repository is MIT licensed. Each external component keeps its own license.
 
 - `zotero-mcp` is maintained upstream by its original authors.
 - `claude-obsidian` and `zotero-arxiv-daily` are forks and must retain upstream license and attribution.

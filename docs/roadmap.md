@@ -2,7 +2,7 @@
 
 ## Release Blockers
 
-- Add explicit licenses for `paper-wiki-stack` and `mineru-zotero-mcp`.
+- Add explicit license for `mineru-zotero-mcp`.
 - Audit `claude-obsidian` and `zotero-arxiv-daily` histories before making them public.
 - Decide whether to publish a sanitized vault template instead of the full working vault.
 - Fix or clearly document `arxiv_ingest_paper` failures on the Zotero item creation path.

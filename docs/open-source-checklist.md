@@ -37,7 +37,7 @@ Do not delete private local files just to publish. Keep them ignored and publish
 - Keep only docs, examples, and helper scripts.
 - Keep example configs with placeholders.
 - Run `scripts/check-secrets.sh .`.
-- Add a license when ready.
+- Keep `LICENSE` and README license notes in sync.
 
 ## mineru-zotero-mcp
 
