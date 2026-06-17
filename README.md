@@ -1,17 +1,18 @@
 # Paper Wiki Stack
 
-Open-source integration guide for a Zotero + MinerU + Obsidian paper-reading workflow.
+Open-source integration guide for a Zotero + MinerU + Obsidian paper-reading and writing workflow.
 
-This repository is the distribution and documentation layer. It does not vendor private vault data, parsed PDFs, Zotero databases, local recommendation outputs, or secrets. The stack is composed of a small set of focused projects:
+This repository is the distribution and documentation layer for Paper Wiki Stack. It does not vendor private vault data, parsed PDFs, Zotero databases, local recommendation outputs, or secrets. The stack is composed of a small set of focused projects:
 
 | Component | Role | Required |
 |---|---|---:|
-| `mineru-zotero-mcp` | MCP server for Zotero PDF parsing, MinerU anchors, figures, arXiv ingest helpers | Yes |
-| `claude-obsidian` fork with `paper-wiki` | Obsidian vault conventions, paper source-page skill, indexes, lint scripts | Yes |
-| `zotero-mcp` | Zotero metadata, collections, notes, annotations, PDF access | Yes |
-| `zotero-arxiv-daily` fork | Optional daily arXiv recommendations exported as JSON | Optional |
-| Obsidian | Human-facing markdown vault | Recommended |
-| Codex or another MCP client | Agent runtime that calls MCP tools and follows the paper-wiki workflow | Recommended |
+| [Zhouqm-Git/claude-obsidian](https://github.com/Zhouqm-Git/claude-obsidian) | Obsidian vault, original wiki skills, and the added `paper-wiki` skill | Yes |
+| Obsidian | Human-facing markdown vault and writing environment | Yes |
+| Zotero Desktop | Reference manager, collections, metadata, local PDFs, annotations | Yes |
+| [Zhouqm-Git/mineru-zotero-mcp](https://github.com/Zhouqm-Git/mineru-zotero-mcp) | MCP server for Zotero PDF parsing, MinerU anchors, figures, arXiv ingest helpers | Yes |
+| `zotero-mcp` | Upstream MCP server for Zotero metadata, collections, notes, annotations, PDF access | Yes |
+| Codex, ZCode, Claude Desktop, or another MCP client | Agent runtime that calls the MCP tools and follows the paper-wiki workflow | Yes |
+| [Zhouqm-Git/zotero-arxiv-daily](https://github.com/Zhouqm-Git/zotero-arxiv-daily) | Optional daily arXiv recommendations exported as local JSON | Optional |
 
 ## What This Stack Does
 
@@ -26,12 +27,26 @@ wiki/sources/zotero/<collection_path>/<citekey>.md
 
 5. Optionally reads daily recommendation JSON from `zotero-arxiv-daily`, ingests selected arXiv papers into Zotero, syncs local PDFs, parses them with MinerU, and writes source pages.
 
+## What This Adds To `claude-obsidian`
+
+Paper Wiki Stack is an extension of `claude-obsidian`, not a replacement for it. The original wiki features remain available, including save, ingest, query, retrieval, linting, canvas, mode routing, and Obsidian-flavored markdown workflows.
+
+This stack adds the paper-specific layer:
+
+- Zotero-backed paper identity: item keys, collections, citekeys, metadata, local PDF attachments.
+- MinerU-backed PDF parsing: markdown, anchors, tables, figures, and page-level evidence.
+- Paper source pages under `wiki/sources/zotero/<collection_path>/<citekey>.md`.
+- Evidence-first reading and writing: claims can be tied back to PDF anchors, tables, and figures.
+- Zotero collection mirroring into the Obsidian wiki path structure.
+- Optional arXiv recommendation-to-ingestion workflow via `zotero-arxiv-daily`.
+- Scripts for rebuilding paper indexes and linting source-page structure.
+
 ## Repository Strategy
 
 This stack is intentionally not published as one giant source tree.
 
-- `mineru-zotero-mcp` should be developed and versioned as its own package.
-- `claude-obsidian` and `zotero-arxiv-daily` are heavily modified forks and should retain upstream attribution.
+- [Zhouqm-Git/mineru-zotero-mcp](https://github.com/Zhouqm-Git/mineru-zotero-mcp) should be developed and versioned as its own package.
+- [Zhouqm-Git/claude-obsidian](https://github.com/Zhouqm-Git/claude-obsidian) and [Zhouqm-Git/zotero-arxiv-daily](https://github.com/Zhouqm-Git/zotero-arxiv-daily) are heavily modified forks and should retain upstream attribution.
 - `zotero-mcp` should remain an external dependency unless you need to maintain a public patch branch.
 - This repository documents how to assemble the stack safely.
 
@@ -52,8 +67,9 @@ You need:
 - MinerU API token from the MinerU API Management page.
 - Python 3.10+.
 - `zotero-mcp-server[pdf]`.
-- `mineru-zotero-mcp`.
+- [Zhouqm-Git/mineru-zotero-mcp](https://github.com/Zhouqm-Git/mineru-zotero-mcp).
 - An Obsidian vault using the `claude-obsidian` paper-wiki layout.
+- Codex, ZCode, Claude Desktop, or another MCP client.
 
 Optional:
 
@@ -99,9 +115,21 @@ pip install "zotero-mcp-server[pdf]"
 Install the custom MCP server:
 
 ```bash
-git clone https://github.com/<your-org>/mineru-zotero-mcp.git
+git clone https://github.com/Zhouqm-Git/mineru-zotero-mcp.git
 cd mineru-zotero-mcp
 pip install -e .
+```
+
+Clone the Obsidian/wiki layer:
+
+```bash
+git clone https://github.com/Zhouqm-Git/claude-obsidian.git
+```
+
+Optional recommendation provider:
+
+```bash
+git clone https://github.com/Zhouqm-Git/zotero-arxiv-daily.git
 ```
 
 Configure your MCP client using one of:
@@ -172,17 +200,19 @@ arxiv_fetch_pdf -> zotero_add_by_url -> zotero_local_sync -> mineru_parse_pdf
 
 See [docs/troubleshooting.md](docs/troubleshooting.md).
 
-## Open-Source Safety
+## Privacy And Security
 
-This repository is designed to be public. Your working vault, Zotero files, parsed paper assets, recommendation outputs, and real MCP configs should stay local or live in separately sanitized repositories.
+This repository is designed to be public and contains only documentation, examples, and helper scripts. A real working installation may contain private research notes, Zotero files, parsed paper assets, recommendation outputs, and local MCP configs. Keep those files local or publish them only from separately sanitized repositories.
 
-Run before publishing:
+Run this before publishing changes:
 
 ```bash
 scripts/check-secrets.sh .
 ```
 
-## What Not To Commit
+The helper scripts are intentionally tracked in Git. They should not be added to `.gitignore`; they are part of the public setup and validation surface. The files to ignore are local runtime outputs and credentials.
+
+## Files Not To Commit
 
 Do not commit:
 
@@ -202,7 +232,7 @@ This repository includes a defensive [.gitignore](.gitignore) and `scripts/check
 This repository is MIT licensed. Each external component keeps its own license.
 
 - `zotero-mcp` is maintained upstream by its original authors.
-- `claude-obsidian` and `zotero-arxiv-daily` are forks and must retain upstream license and attribution.
-- `mineru-zotero-mcp` should include its own license before publication.
+- [Zhouqm-Git/claude-obsidian](https://github.com/Zhouqm-Git/claude-obsidian) and [Zhouqm-Git/zotero-arxiv-daily](https://github.com/Zhouqm-Git/zotero-arxiv-daily) are forks and must retain upstream license and attribution.
+- [Zhouqm-Git/mineru-zotero-mcp](https://github.com/Zhouqm-Git/mineru-zotero-mcp) should include its own license before publication.
 
 See [docs/repository-strategy.md](docs/repository-strategy.md).
