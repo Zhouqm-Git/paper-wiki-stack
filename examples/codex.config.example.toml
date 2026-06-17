@@ -1,0 +1,32 @@
+# Copy the relevant blocks into your Codex config.
+# Do not commit your real config after replacing placeholders.
+
+[mcp_servers.zotero]
+command = "zotero-mcp"
+args = []
+
+[mcp_servers.zotero.env]
+ZOTERO_LOCAL = "true"
+ZOTERO_LIBRARY_ID = "replace_with_library_id"
+ZOTERO_USER_ID = "replace_with_user_id"
+ZOTERO_API_KEY = "replace_with_zotero_write_api_key"
+ZOTERO_LIBRARY_TYPE = "user"
+
+[mcp_servers.mineru_zotero]
+command = "mineru-zotero-mcp"
+args = []
+
+[mcp_servers.mineru_zotero.env]
+MINERU_API_TOKEN = "replace_with_mineru_api_token"
+VAULT_ROOT = "/absolute/path/to/claude-obsidian"
+ZOTERO_LOCAL = "true"
+ZOTERO_LIBRARY_ID = "replace_with_library_id"
+ZOTERO_USER_ID = "replace_with_user_id"
+ZOTERO_API_KEY = "replace_with_zotero_write_api_key"
+ZOTERO_LIBRARY_TYPE = "user"
+RECOMMENDATIONS_URL = "/absolute/path/to/zotero-arxiv-daily/data/recommendations"
+
+# Optional WebDAV. Leave unset unless you intentionally use WebDAV.
+# WEBDAV_URL = "https://example.com/dav/zotero/"
+# WEBDAV_USER = "replace_with_webdav_user"
+# WEBDAV_PASS = "replace_with_webdav_password"

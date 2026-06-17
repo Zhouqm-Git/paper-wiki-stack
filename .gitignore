@@ -1,0 +1,54 @@
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.local
+*.secret
+secrets/
+
+# MCP/client configs with real paths or env values
+config.toml
+mcp.json
+*.mcp.json
+codex.config.toml
+zcode.mcp.json
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+
+# Obsidian local state
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/app.json
+.obsidian/appearance.json
+.trash/
+
+# Paper/wiki private artifacts
+.raw/
+attachments/
+*.pdf
+*.sqlite
+*.sqlite-*
+zotero.sqlite
+storage/
+
+# Generated recommendation outputs and caches
+data/recommendations/*.json
+data/cache/
+outputs/
+.hydra/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
